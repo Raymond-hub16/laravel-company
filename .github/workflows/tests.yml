@@ -35,7 +35,12 @@ jobs:
         echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
     - name: Install PHP dependencies
-      run: composer install --no-interaction --prefer-dist --no-progress --ansi
+      run: |
+        if [[ "${{ matrix.dependency-version }}" == "prefer-lowest" ]]; then
+          composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist --no-progress --ansi
+        else
+          composer install --no-interaction --prefer-dist --no-progress --ansi
+        fi
 
     - name: Run Unit With PHPUnit
       run: composer test:unit:phpunit
