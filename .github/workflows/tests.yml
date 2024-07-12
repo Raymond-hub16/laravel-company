@@ -2,46 +2,43 @@ name: Tests
 
 on:
   push:
-    branches:
-      - master
-      - '*.x'
   pull_request:
   schedule:
     - cron: '0 0 * * *'
 
-permissions:
-  contents: read
-
 jobs:
   tests:
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
       matrix:
-        php: [8.1, 8.2]
+        os: [ubuntu-latest, macos-latest]
+        php: ['8.1', '8.2']
+        dependency-version: [prefer-lowest, prefer-stable]
 
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
-          coverage: none
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, gd, pdo_mysql, fileinfo, ftp, redis, memcached, gmp
+        tools: composer:v2
+        coverage: xdebug
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+    - name: Setup Problem Matchers
+      run: |
+        echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+        echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Copy environment file
-        run: cp .env.example .env
+    - name: Install PHP dependencies
+      run: composer install --no-interaction --prefer-dist --no-progress --ansi
 
-      - name: Generate app key
-        run: php artisan key:generate
+    - name: Run Unit With PHPUnit
+      run: composer test:unit:phpunit
 
-      - name: Execute tests
-        run: vendor/bin/phpunit
+    - name: Run Unit With Pest
+      run: composer test:unit:pest
