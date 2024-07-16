@@ -54,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <img src="/lte/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ Auth::user()->name; }}</a>
+                        <a href="#" class="d-block">{{ Auth::user()->name }}</a>
                     </div>
                 </div>
 
@@ -64,17 +64,47 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+                        <li class="nav-item ">
+                            <a href="/" class="nav-link " target="_blank">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Lihat Website</p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item ">
+                            <a href="/dashboard" class="nav-link ">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Dashboard</p>
+                            </a>
+
+                        </li>
                         <li class="nav-item menu-open">
                             <a href="#" class="nav-link ">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Starter Pages
+                                    Data Master
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link ">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> Page</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link ">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> Page</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link ">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p> Page</p>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link ">
                                         <i class="far fa-circle nav-icon"></i>
@@ -136,7 +166,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                                 <div class="card-body">
 
-
+                                    @yield('content')
 
 
                                 </div>
@@ -168,7 +198,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 Anything you want
             </div>
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+            <strong>Copyright &copy; {{ date('Y') }} <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All
+            rights
             reserved.
         </footer>
     </div>
